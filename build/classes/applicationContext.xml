@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context"
+xmlns:aop="http://www.springframework.org/schema/aop"
+xmlns:tx="http://www.springframework.org/schema/tx"
+xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+
+<!-- name 是起一个名字，我们可以通过这个name来利用容器获取对象 
+	   name 可以使用特殊字符
+	   name 可以重复 
+	   我们在实际开发中不推荐将多个对象名字命名为重复的-->
+<!-- id与name作用基本相同，单不推荐使用 不支持特殊字符，不能重复 -->
+	   
+<!-- class：是被管理对象的全包名，spring会通过这个包名来创建对象 -->
+<!-- request 在web环境下，如果scope属性为request 那么这个对象被创建出来 他的生命周期会与request请求一致-->
+<!-- session 同理 ，生命周期与session一致 -->
+<!-- <bean name="user" class="com.sikiedu.bean.User" lazy-init="default" scope="prototype" init-method="userInit" destroy-method="userDestroy">
+	<property name="u_id" value="2"></property>
+</bean> -->
+<!-- 导入其他Spring的配置文件 -->
+<!-- <import resource="/applicationContext_Injection.xml"/> -->
+<!-- <bean class="com.ljp.firstweb.SpringDIConfig"   /> -->
+
+<!-- <context:component-scan base-package="com.ljp.firstweb" /> -->
+<context:property-placeholder location="classpath:db-mysql8.properties"/>
+
+<bean name="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+<property name="driverClass" value="${jdbc.driver}"></property>
+<property name="jdbcUrl" value="${jdbc.url}"></property>
+<property name="user" value="${jdbc.username}"></property>
+<property name="password" value="${jdbc.password}"></property>
+</bean>
+
+<!-- 配置SqlSessionFactory -->
+<bean id="SqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<!-- 数据源 -->
+	<property name="dataSource" ref="dataSource"></property>
+	<!-- mybatis主文件 -->
+	<!-- <property name="configLocation" value="classpath:mybatis-config.xml"></property> -->
+    <!-- <property name="mapperLocations" value="classpath*:com/ljp/simpleoa/mapper/*.xml"></property> -->
+</bean>
+
+<!-- 配置自动扫描*mapper.xml何mapper接口 -->
+<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+<property name="sqlSessionFactoryBeanName" value="SqlSessionFactoryBean"></property>
+<property name="basePackage" value="com.ljp.simpleoa.mapper"></property>
+</bean>
+
+<bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+<property name="dataSource" ref="dataSource"></property>
+</bean>
+<!-- <aop:aspectj-autoproxy expose-proxy="true"/>
+ --><!-- 启用注解事务 -->
+<tx:annotation-driven transaction-manager="transactionManager"/>
+
+</beans>
