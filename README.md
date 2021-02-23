@@ -1,0 +1,2 @@
+# SimpleOA
+这个项目是自动化办公项目，负责web后端开发，实现了报销工作流、登录验证模块、部门管理模块、员工管理模块。整个项目使用mysql作为数据库系统、spring框架作容器化管理、springmvc作web快速开发宽架、mybaits作持久化宽架、springs security做登录验证管理，开发完成后使用dubbo+zookeeper宽架对项目进行纵向拆分。其中报销工作流采用自己开发的流程框架。
