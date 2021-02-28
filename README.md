@@ -1,9 +1,9 @@
 # SimpleOA
 <p>
-  <a href="https://github.com/ljp-cyber/SimpleOA"><img src="http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/badge/%E5%90%8E%E5%8F%B0%E9%A1%B9%E7%9B%AE-mall-blue.svg" alt="后台项目"</a>
+  <a href="https://github.com/ljp-cyber/SimpleOA"></a>
 <p>
 
-##项目介绍
+## 项目介绍
 这个项目是自动化办公项目
 ，实现了报销工作流、登录验证模块、部门管理模块、员工管理模块。整个项目使用mysql作为数据库系统、spring框架作容器化管理、springmvc作web快速开发宽架、mybaits作持久化宽架、springs security做登录验证管理。其中报销工作流采用自己开发的流程框架。
 1、采用邻接链表存储流程图
@@ -11,10 +11,10 @@
 3、流程构建使用构建者模式降低构建难度
 4、开发通用流程节点、跳转策略提高代码重用
 
-##项目演示
+## 项目演示
 项目在线演示地址：[http://www.shxex.cn/SimpleOA/](http://www.shxex.cn/Simple/)
 
-###技术选型
+### 技术选型
 技术 | 说明 | 官网
 ----|----|----
 jsp+servlet | 前端页面 | 
