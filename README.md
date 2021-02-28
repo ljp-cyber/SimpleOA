@@ -24,6 +24,7 @@ spring+springMVC | web框架 |
 spring security | 权限管理框架 |
 
 ##项目布局
+``` lua
 SimpleOA/src/com/ljp/simpleoa -- 源码目录
 ├── config-- java配置文件
 ├── controller -- 控制器模块
@@ -36,6 +37,7 @@ SimpleOA/src/com/ljp/simpleoa -- 源码目录
 ├── MybatisGerneratorDo.java --mybaits代码生成工具
 ├── PaginationPlugin.java --mybaits分页插件
 └── Constant.java --常量
+``` lua
 
 ## 搭建步骤
 - 安装jdk8以上开发环境
