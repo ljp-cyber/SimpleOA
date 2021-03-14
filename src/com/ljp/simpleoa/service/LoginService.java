@@ -41,10 +41,12 @@ public class LoginService {
 		System.out.println(oldPw);
 		System.out.println(newPw);
 		if(oldPw.equals(worker.getWorkerPw())){
+			Worker newWorker = new Worker();
+			newWorker.setWorkerPw(newPw);
 			WorkerExample example=new WorkerExample();
 			Criteria criteria = example.createCriteria();
 			criteria.andWorkerSnEqualTo(worker.getWorkerSn());
-			int count = workerMapper.updateByExampleSelective(worker, example);
+			int count = workerMapper.updateByExampleSelective(newWorker, example);
 			if(count>0) {
 				worker.setWorkerPw(newPw);
 				return worker;

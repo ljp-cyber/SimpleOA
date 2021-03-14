@@ -5,11 +5,12 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.stereotype.Component;
 
 /**
  * 服务器关闭把会话信息保存到本地
  */
-//@Component
+@Component
 public class ApplicationEventListener implements ApplicationListener<ApplicationEvent> {
 	
 	private boolean save = false;
@@ -21,9 +22,11 @@ public class ApplicationEventListener implements ApplicationListener<Application
 			if (!save) {
 				ApplicationContext applicationContext = ((ContextClosedEvent) arg0).getApplicationContext();
 				try {
-					SessionRegistrySerializable registrySerializable = (SessionRegistrySerializable) applicationContext
-							.getBean(SessionRegistry.class);
-					registrySerializable.saveAllSessionInformations();
+					SessionRegistry sessionRegistry = applicationContext.getBean(SessionRegistry.class);
+					if(sessionRegistry instanceof SessionRegistrySerializable) {
+						SessionRegistrySerializable registrySerializable = (SessionRegistrySerializable)sessionRegistry;
+						registrySerializable.saveAllSessionInformations();
+					}
 					save = true;
 				} catch (Exception e) {
 					e.printStackTrace();

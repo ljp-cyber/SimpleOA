@@ -1,8 +1,16 @@
 package com.ljp.simpleoa.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
-public class Worker implements Serializable{
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.ljp.simpleoa.Constant;
+
+public class Worker implements Serializable,UserDetails{
 	
 	private static final long serialVersionUID = -5305510795889968181L;
 
@@ -81,6 +89,70 @@ public class Worker implements Serializable{
     public void setPost(String post) {
         this.post = post == null ? null : post.trim();
     }
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO 等待重构转移此段代码到合适的地方
+		ArrayList<GrantedAuthority> list = new ArrayList<>();
+		System.out.println(getPost());
+		String roleName;
+		switch(getPost()) {
+		case Constant.POST_GM:
+			roleName=Constant.ROLE_GM;
+			break;
+		case Constant.POST_DM:
+			roleName=Constant.ROLE_DM;;
+			break;
+		case Constant.POST_WK:
+			roleName=Constant.ROLE_WK;
+			break;
+		case Constant.POST_FM:
+			roleName=Constant.ROLE_FM;
+			break;
+//		case Constant.POST_IV:
+//			roleName=Constant.ROLE_SHOW;
+//			break;
+		default:
+			roleName=Constant.ROLE_TOURIST;
+		}
+		GrantedAuthority ga = new SimpleGrantedAuthority(roleName);
+		list.add(ga);
+		return list;
+	}
+
+	@Override
+	public String getPassword() {
+		return getWorkerPw();
+	}
+
+	@Override
+	public String getUsername() {
+		return getWorkerSn();
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
+	}
     
     
 }

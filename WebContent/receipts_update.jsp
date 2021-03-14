@@ -12,7 +12,7 @@
         </div>
         <div class="admin-form theme-primary mw1000 center-block" style="padding-bottom: 175px;">
             <div class="panel heading-border">
-                <form:form id="admin-form" name="addForm" action="${pageContext.request.contextPath}/receipts/update" modelAttribute="receipts">
+                <form:form id="admin-form" name="addForm" method="POST" action="${pageContext.request.contextPath}/receipts/update" modelAttribute="receipts">
                     <form:hidden path="receiptsId"/>
                     <form:hidden path="createrId"/>
                     <form:hidden path="creatTime"/>
@@ -81,7 +81,7 @@
                             </div>
                         </div>
                         <div class="panel-footer text-right">
-                            <button type="submit" class="button"> 保存 </button>
+                            <button type="submit" class="button">保存 </button>
                             <button type="button" class="button" onclick="javascript:window.history.go(-1);"> 返回 </button>
                         </div>
                     </div>

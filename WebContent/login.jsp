@@ -6,7 +6,7 @@
 <head>
   <!-- Meta, title, CSS, favicons, etc. -->
   <meta charset="utf-8">
-  <title>欢迎使用OA</title>
+  <title>欢迎使用SimpleOA</title>
   <meta name="keywords" content="HTML5 Bootstrap 3 Admin Template UI Theme" />
   <meta name="description" content="AbsoluteAdmin - A Responsive HTML5 Admin UI Framework">
   <meta name="author" content="AbsoluteAdmin">
@@ -43,8 +43,8 @@
 
           <!-- Login Logo -->
 	    <div class="content-header">
-              <h1> XXX OA</h1>
-              <p class="lead">欢迎使用自动化管理系统</p>
+              <h1> SimpleOA</h1>
+              <p class="lead">欢迎使用SimpleOA</p>
             </div>
           <!-- Login Panel/Form -->
           <div class="panel mt30 mb25">

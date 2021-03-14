@@ -6,7 +6,7 @@ import org.springframework.security.web.context.AbstractSecurityWebApplicationIn
  * 也可以用web.xml来配置
  * 把工作委托给springsecurityFilterChain来操作，大约有14个Filter
  * 1、WebAsyncManagerIntegrationFilter：
- * 		提供了对securityContext和WebAsyncManager的集成，其会把SecurityContext设置到异步线程中，
+ * 		提供了对securityContext和WebAsyncManager的集成，其会把SecurityContext设置ThreadLocal中，
  * 		使其也能获取到用户上下文认证信息。
  * 2、SecurityContextPersistenceFilter
  * 		a.请求到来时，通过HttpSessionSecurityContextRepository接口从Session中读取SecurityContext，

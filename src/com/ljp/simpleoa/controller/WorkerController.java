@@ -2,10 +2,13 @@ package com.ljp.simpleoa.controller;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,30 +33,38 @@ public class WorkerController {
 	@Autowired
 	private DepartmentService departmentService;
 	
-	private List<Worker> list;
+	private AtomicBoolean change = new AtomicBoolean(false);//TODO 之前用于判断缓存有没有改变暂时不用了，实现负责
 	
-	private boolean change;
+	public WorkerController() {}
 	
-	private PageInfo pageInfo;
-	
-	public WorkerController() {
-		pageInfo=new PageInfo(0);
-		change=true;
+	private PageInfo processPageInfo(HttpServletRequest httpServletRequest) {
+		HttpSession session = httpServletRequest.getSession();
+		Object workerListPageInfo = session.getAttribute("workerListPageInfo");
+		PageInfo pageInfo = null;
+		if(workerListPageInfo==null) {
+			pageInfo = new PageInfo(0);
+			session.setAttribute("workerListPageInfo", pageInfo);
+		}else {
+			pageInfo = (PageInfo)workerListPageInfo;
+		}
+		return pageInfo;
+		
 	}
 	
 	@RequestMapping(value="/list",method=RequestMethod.GET)
 	public String worker_list(
 			@RequestParam(value="toPage",required=false)String toPage,HttpServletRequest httpServletRequest,Model model) {
+		Worker worker = (Worker)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		PageInfo pageInfo = processPageInfo(httpServletRequest);
 		if(toPage!=null&&toPage.equals("next")) {
 			pageInfo.nextPage();
 		}else if(toPage!=null&&toPage.equals("last")) {
 			pageInfo.lastPage();
 		}
-		if(change) {
-			list = workerService.queryAll();
-			pageInfo.setRowCount(list.size());
-			change=false;
-		}
+		List<Worker> list;
+		if(worker.getWorkerId().equals(workerService.getGeneralManager().getWorkerId()))list = workerService.queryAll();
+		else list = workerService.queryByDepartment(worker);
+		pageInfo.setRowCount(list.size());
 		List<Worker> thisList = MyCollenctionUtils.addSomeToList(
 				list, pageInfo.getLimit(), pageInfo.getPageSize());
 		httpServletRequest.setAttribute("pageInfo", "共"+list.size()+"项，"+"第"+pageInfo.getThisPage()+"/"+pageInfo.getPageCount()+"页");
@@ -65,7 +76,7 @@ public class WorkerController {
 	public String worker_remove(@RequestParam("sn")String sn) {
 		int count = workerService.removeOne(sn);
 		if(count>0) {
-			change=true;
+			change.set(true);
 		}
 		return "redirect:/worker/list";
 	}
@@ -74,7 +85,7 @@ public class WorkerController {
 	public String worker_removeSome(@RequestParam("sn")String sn) {
 		int count = workerService.removeSome(sn);
 		if(count>0) {
-			change=true;
+			change.set(true);
 		}
 		return "redirect:/worker/list";
 	}
@@ -92,7 +103,7 @@ public class WorkerController {
 		worker.setWorkerPw("1234");
 		int count = workerService.addOne(worker);
 		if(count>0) {
-			change=true;
+			change.set(true);
 		}
 		return "redirect:/worker/to_add";
 	}
@@ -109,7 +120,7 @@ public class WorkerController {
 	public String worker_update(Worker worker) {
 		int count = workerService.updateOne(worker);
 		if(count>0) {
-			change=true;
+			change.set(true);
 		}
 		return "redirect:/worker/to_update?sn="+worker.getWorkerSn();
 	}

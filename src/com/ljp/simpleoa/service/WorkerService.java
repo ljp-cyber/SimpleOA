@@ -25,7 +25,20 @@ public class WorkerService {
 	
 	@Autowired
 	DepartmentMapper departmentMapper;
-	
+	public List<Worker> queryByDepartment(Worker dm) {
+		WorkerExample workerExample = new WorkerExample();
+		Criteria criteria = workerExample.createCriteria();
+		criteria.andDepartmentIdEqualTo(dm.getDepartmentId());
+		List<Worker> list = workerMapper.selectByExample(workerExample);
+		Map<Integer, Department> departmentList = departmentMapper.selectByExampleToMap(null);
+		for (int i = 0; i < list.size(); i++) {
+			Worker worker = list.get(i);
+			Integer departmentId = worker.getDepartmentId();
+			Department department = departmentList.get(departmentId);
+			worker.setDepartment(department);
+		}
+		return list;
+	}
 	public List<Worker> queryAll() {
 		List<Worker> list = workerMapper.selectByExample(null);
 		Map<Integer, Department> departmentList = departmentMapper.selectByExampleToMap(null);

@@ -7,7 +7,15 @@ public class Constant {
 	public static final String POST_FM = "财务";
 	public static final String POST_DM = "部门经理";
 	public static final String POST_WK = "员工";
+	public static final String POST_IV = "面试官";
 	public static final String[] POST = { POST_GM, POST_FM, POST_DM, POST_WK };
+	
+	public static final String ROLE_GM = "GM";
+	public static final String ROLE_FM = "FM";
+	public static final String ROLE_DM = "DM";
+	public static final String ROLE_WK = "WK";
+//	public static final String ROLE_SHOW = "SHOW";
+	public static final String ROLE_TOURIST = "TOURIST";
 
 	
 	public static final String COST_JIAOTONG = "交通";

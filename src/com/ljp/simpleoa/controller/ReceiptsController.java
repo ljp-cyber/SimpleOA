@@ -6,11 +6,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ljp.simpleoa.Constant;
 import com.ljp.simpleoa.model.Receipts;
@@ -37,8 +39,9 @@ public class ReceiptsController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public String receipts_add(Receipts receipts, HttpServletRequest httpServletRequest) {
 		System.out.println("*****receipts_add******" + receipts);
-		HttpSession session = httpServletRequest.getSession();
-		Worker user = (Worker) session.getAttribute("worker");
+//		HttpSession session = httpServletRequest.getSession();
+//		Worker user = (Worker) session.getAttribute("worker");
+		Worker user = (Worker)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		receiptsService.creat(receipts, user);
 		return "redirect:/receipts/toAdd";
 	}
@@ -56,8 +59,9 @@ public class ReceiptsController {
 	public String receipts_check(ReceiptsRecord record, HttpServletRequest httpServletRequest, String dealWay) {
 		System.out.println("*****receipts_check******" + record);
 		System.out.println("*****receipts_check******" + dealWay);
-		HttpSession session = httpServletRequest.getSession();
-		Worker user = (Worker) session.getAttribute("worker");
+//		HttpSession session = httpServletRequest.getSession();
+//		Worker user = (Worker) session.getAttribute("worker");
+		Worker user = (Worker)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		receiptsService.check(record, user, dealWay);
 		return "redirect:/receipts/deal";
 	}
@@ -66,7 +70,8 @@ public class ReceiptsController {
 	public String receipts_deal(@RequestParam(value = "toPage", required = false) String toPage, Model model,
 			HttpServletRequest httpServletRequest) {
 		HttpSession session = httpServletRequest.getSession();
-		Worker user = (Worker) session.getAttribute("worker");
+//		Worker user = (Worker) session.getAttribute("worker");
+		Worker user = (Worker)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
 		PageInfo pageInfo = (PageInfo) session.getAttribute("dealPageInfo");
 		if (pageInfo == null) {
@@ -80,8 +85,9 @@ public class ReceiptsController {
 
 	@RequestMapping(value = "/submit", method = RequestMethod.POST)
 	public String receipts_detail(Integer receiptsId, HttpServletRequest httpServletRequest) {
-		HttpSession session = httpServletRequest.getSession();
-		Worker user = (Worker) session.getAttribute("worker");
+//		HttpSession session = httpServletRequest.getSession();
+//		Worker user = (Worker) session.getAttribute("worker");
+		Worker user = (Worker)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		receiptsService.submit(receiptsId, user);
 		return "redirect:/receipts/deal";
 	}
@@ -96,7 +102,8 @@ public class ReceiptsController {
 	public String receipts_list(@RequestParam(value = "toPage", required = false) String toPage, Model model,
 			HttpServletRequest httpServletRequest) {
 		HttpSession session = httpServletRequest.getSession();
-		Worker user = (Worker) session.getAttribute("worker");
+//		Worker user = (Worker) session.getAttribute("worker");
+		Worker user = (Worker)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		PageInfo pageInfo = (PageInfo) session.getAttribute("pageInfo");
 		if (pageInfo == null) {
@@ -125,11 +132,12 @@ public class ReceiptsController {
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String receipts_update(Receipts receipts, HttpServletRequest httpServletRequest) {
+	public String receipts_update(Receipts receipts, HttpServletRequest httpServletRequest,RedirectAttributes attributes) {
 		System.out.println("******receipts_update******" + receipts);
-		HttpSession session = httpServletRequest.getSession();
-		Worker user = (Worker) session.getAttribute("worker");
+//		HttpSession session = httpServletRequest.getSession();
+//		Worker user = (Worker) session.getAttribute("worker");
+		Worker user = (Worker)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		receiptsService.update(receipts, user);
-		return "redirect:/receipts/toUpdate?receiptsId=" + receipts.getReceiptsId();
+		return "redirect:/receipts/deal";
 	}
 }

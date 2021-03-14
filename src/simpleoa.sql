@@ -2,6 +2,7 @@ drop database if exists db_simpleoa;
 create database db_simpleoa char set utf8;
 use db_simpleoa;
 
+SET FOREIGN_KEY_CHECKS=0;
 /*部门表*/
 create table department
 (
@@ -70,3 +71,4 @@ insert into worker values(null,'10001','000000','刘备',1,'总经理');
 insert into worker values(null,'10002','000000','孙尚香',2,'财务');
 insert into worker values(null,'10003','000000','关羽',3,'部门经理');
 insert into worker values(null,'10004','000000','周仓',3,'员工');
+SET FOREIGN_KEY_CHECKS=1;

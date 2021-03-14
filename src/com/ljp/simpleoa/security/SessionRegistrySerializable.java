@@ -35,7 +35,7 @@ public class SessionRegistrySerializable
 
 	protected final Log logger = LogFactory.getLog(SessionRegistrySerializable.class);
 
-	public static final String fileUrl = "/SessionRegistry";
+	public static final String fileUrl = "files/SessionRegistry";
 
 	/** <principal:Object,SessionIdSet> */
 	private ConcurrentMap<Object, Set<String>> principals = new ConcurrentHashMap<Object, Set<String>>();

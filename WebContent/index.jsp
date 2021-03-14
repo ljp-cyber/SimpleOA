@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <jsp:include page="top.jsp"/>
-
+<security:authentication property="principal" var="worker"/>
 <section id="content" class="table-layout animated fadeIn">
     <div class="tray tray-center">
         <div class="content-header">
@@ -15,15 +16,15 @@
                     </div>
                     <div class="section row">
                         <div class="col-md-2">工号</div>
-                        <div class="col-md-4">${sessionScope.worker.workerSn}</div>
+                        <div class="col-md-4">${worker.workerSn}</div>
                         <div class="col-md-2">姓名</div>
-                        <div class="col-md-4">${sessionScope.worker.workerName}</div>
+                        <div class="col-md-4">${worker.workerName}</div>
                     </div>
                     <div class="section row">
                         <div class="col-md-2">所属部门</div>
-                        <div class="col-md-4">${sessionScope.worker.department.departmentName}</div>
+                        <div class="col-md-4">${worker.department.departmentName}</div>
                         <div class="col-md-2">职务</div>
-                        <div class="col-md-4">${sessionScope.worker.post}</div>
+                        <div class="col-md-4">${worker.post}</div>
                     </div>
                     <div class="panel-footer text-right">
                         <button type="button" class="button" onclick="javascript:window.history.go(-1);"> 返回 </button>

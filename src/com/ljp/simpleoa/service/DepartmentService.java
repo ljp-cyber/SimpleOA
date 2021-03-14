@@ -71,8 +71,12 @@ public class DepartmentService {
 		DepartmentExample departmentExample = new DepartmentExample();
 		Criteria criteria = departmentExample.createCriteria();
 		criteria.andDepartmentSnIn(Arrays.asList( sn.split(",")));
-		int count = departmentMapper.deleteByExample(departmentExample);
-		
+		int count=0;
+		try {
+			count = departmentMapper.deleteByExample(departmentExample);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		return count;
 	}
 }

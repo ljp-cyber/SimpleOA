@@ -164,7 +164,7 @@
 		 removeId+=id;
 	 }
 	 if(checked.length>0){
-		 var mymessage=confirm("确定吗？"+removeSn);
+		 var mymessage=confirm("确定吗？"+removeId);
 		 alert(mymessage);
 		    if(mymessage==true){
 		    	var params={}

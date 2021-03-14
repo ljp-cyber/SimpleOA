@@ -9,5 +9,8 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <session-config>
+      <session-timeout>1</session-timeout>
+  </session-config>
   
 </web-app>

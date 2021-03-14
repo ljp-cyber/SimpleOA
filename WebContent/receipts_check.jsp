@@ -2,10 +2,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.ljp.simpleoa.Constant" %>
 <jsp:include page="top.jsp"/>
 <section id="content" class="table-layout animated fadeIn">
+<security:authentication property="principal" var="worker"/>
+
     <div class="tray tray-center">
         <div class="content-header">
             <h2> 处理报销单 </h2>
@@ -71,12 +74,12 @@
                                 </label>
                             </div>
                             <div class="panel-footer text-right">
-                                <c:if test="${sessionScope.worker.post==Constant.POST_GM || sessionScope.worker.post==Constant.POST_DM}">
+                                <c:if test="${worker.post==Constant.POST_GM || worker.post==Constant.POST_DM}">
                                 <button type="submit" class="button" name="dealWay" value="${Constant.STEP_CHECK_PAST}" >${Constant.STEP_CHECK_PAST}</button>
                                 <button type="submit" class="button" name="dealWay" value="${Constant.STEP_CHECK_BACK}" >${Constant.STEP_CHECK_BACK}</button>
                                 <button type="submit" class="button" name="dealWay" value="${Constant.STEP_CHECK_REFUSE}" >${Constant.STEP_CHECK_REFUSE}</button>
                                 </c:if>
-                                <c:if test="${sessionScope.worker.post==Constant.POST_FM}">
+                                <c:if test="${worker.post==Constant.POST_FM}">
                                 <button type="submit" class="button" name="dealWay" value="${Constant.STEP_PAY_PAY}" >${Constant.STEP_PAY_PAY}</button>
                                 </c:if>
                                 <button type="button" class="button" onclick="javascript:window.history.go(-1);"> 返回 </button>

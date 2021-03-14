@@ -18,23 +18,37 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.access.vote.AuthenticatedVoter;
 import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.access.vote.UnanimousBased;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+import com.ljp.simpleoa.Constant;
+import com.ljp.simpleoa.model.Worker;
 import com.ljp.simpleoa.security.MyRoleVoter;
 import com.ljp.simpleoa.security.SessionRegistrySerializable;
+import com.ljp.simpleoa.service.WorkerService;
 import com.ljp.simpleoa.utils.IOUtils;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -44,7 +58,21 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
+	DefaultWebSecurityExpressionHandler expressionHandler;
+	
+	@Autowired
 	private SessionRegistry sessionRegistry;
+	
+	@Autowired
+	WorkerService workerService;
+	
+	@Autowired
+	UserDetailsService userDetailsService;
+	
+	@Bean
+	public DefaultWebSecurityExpressionHandler getWebexpressionHandler() {
+		return new DefaultWebSecurityExpressionHandler();
+	}
 
 	// 地址URL，配置里的url相对项目下的，httprequest获取的路径相对服务器里的
 	private static final String loginUrl = "/login";
@@ -87,18 +115,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//return new ConsensusBased();//少数服从多数
 		//return new AffirmativeBased();//一票以上则通过
 	}
+	
+	@Bean
+	public UserDetailsService getUserDetailsService() {
+		return new UserDetailsService() {
+			@Override
+			public UserDetails loadUserByUsername(String arg0) throws UsernameNotFoundException {
+				// TODO Auto-generated method stub
+				UserDetails user =  workerService.queryOne(arg0);
+				System.out.println("查找用户中，即将进行认证！");
+				return user;
+			}
+		};
+	}
 
 	@Bean
 	public SessionRegistry getSessionRegistry() {
-		SessionRegistrySerializable sessionRegistry;
-		sessionRegistry = IOUtils.loadObj(SessionRegistrySerializable.fileUrl);
-		if (sessionRegistry == null) {
-			System.out.println("会话注册表加载为空");
-			return new SessionRegistrySerializable();
-		}
-		sessionRegistry.loadAllSessionInformations();
-		System.out.println("会话注册表加载成功");
-		return sessionRegistry;
+//		SessionRegistrySerializable sessionRegistry;
+//		sessionRegistry = IOUtils.loadObj(SessionRegistrySerializable.fileUrl);
+//		if (sessionRegistry == null) {
+//			System.out.println("会话注册表加载为空");
+//			return new SessionRegistrySerializable();
+//		}
+//		sessionRegistry.loadAllSessionInformations();
+//		System.out.println("会话注册表加载成功");
+//		return sessionRegistry;
+		return new SessionRegistryImpl();
 	}
 
 	@Override
@@ -109,9 +151,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// .and()
 		// .withUser("admin1").password("1234").roles("USER")
 		// ;
-		auth.jdbcAuthentication().dataSource(dataSource)
-				.usersByUsernameQuery("select worker_sn,worker_pw,true from worker where worker_sn = ?")
-				.authoritiesByUsernameQuery("select worker_sn,post from worker where worker_sn = ?");
+//		auth.jdbcAuthentication().dataSource(dataSource)
+//				.usersByUsernameQuery("select worker_sn,worker_pw,true from worker where worker_sn = ?")
+//				.authoritiesByUsernameQuery("select post from worker where worker_sn = ?");
+		auth.userDetailsService(userDetailsService);
+		
 	}
 
 	@Override
@@ -126,6 +170,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// .and()
 		// .httpBasic()//启用httpBasic认证，对话框认证？
 		// ;
+//		http.userDetailsService(userDetailsService);
 		System.out.println("SecurityConfig.HttpSecurity()");
 		http.addFilterBefore(new Filter() {
 
@@ -138,11 +183,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				httpServletResponse.setCharacterEncoding("UTF-8");
 
 				arg2.doFilter(httpServletRequest, httpServletResponse);
+				httpServletResponse.addHeader("Pragma", "no-cache");
+				httpServletResponse.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+				httpServletResponse.addHeader("Cache-Control", "pre-check=0, post-check=0");
+				httpServletResponse.setDateHeader("Expires", 0);
 			}
 		}, WebAsyncManagerIntegrationFilter.class);
 		http.authorizeRequests()// 用户登陆过滤
 				.accessDecisionManager(getAccessDecisionManager())
 				.antMatchers(loginUrl).permitAll()//login不需认证，还可以regexMatchers方法匹配路径
+				.antMatchers("/department/*").hasAnyAuthority(Constant.ROLE_GM)
+				.antMatchers("/worker/*").hasAnyAuthority(Constant.ROLE_GM,Constant.ROLE_DM)
 				.anyRequest().authenticated()// 其他路径允许认证的用户访问
 				.and()// 返回HttpSecurity进行配置连接
 				// --------------登陆设置------------
@@ -159,7 +210,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					}
 				}).and()
 				// --------------记住我设置-----------
-				.rememberMe()//默认存在内存，要更改配置，要不服务器重启失效
+				.rememberMe()//把自动登录的信息存到cookies
+				.tokenValiditySeconds(60*60*24)//该cookies的有效秒数，session失效后会自动使用这个cookies登录
 				.and()
 				// --------------登出设置------------
 				.logout()
@@ -180,7 +232,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.deleteCookies("remember-me").and()
 				// --------------会话和用户登陆管理设置------------
 				.sessionManagement().invalidSessionUrl(indexUrl)// session失效跳转
-				.maximumSessions(maximumSessions).expiredUrl(loginUrl).sessionRegistry(sessionRegistry)
+				.maximumSessions(maximumSessions).expiredUrl(loginUrl).sessionRegistry(sessionRegistry)//默认存在内存，要更改配置，要不服务器重启失效
 				.maxSessionsPreventsLogin(false)// 同一个用户在其他地方登录将前一个剔除下线或不能登陆
 		;
 		// 关闭csrf过滤器，跨域攻击，统一ip
