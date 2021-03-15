@@ -59,7 +59,9 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value= {"/backup"},method=RequestMethod.GET)
-	public String backup(HttpServletRequest request) {
+	public String backup(HttpServletRequest request,@RequestParam String pw) {
+		if(!pw.equals("1411"))
+			return "redirect:/websiteInfo";
 		MimeMessage mMessage=javaMailSender.createMimeMessage();//创建邮件对象
         MimeMessageHelper mMessageHelper;
         Properties prop = new Properties();

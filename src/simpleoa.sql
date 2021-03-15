@@ -53,8 +53,8 @@ FOREIGN KEY(receipts_id) REFERENCES receipts(receipts_id)
 create table receipts_record
 (
 receipts_record_id int not null auto_increment primary key,
-creater_id int,
-next_deal_id int,
+receipts_id int,
+deal_id int,
 deal_time datetime not null,
 deal_type varchar(10) not null,
 deal_result varchar(10) not null,

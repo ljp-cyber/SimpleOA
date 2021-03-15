@@ -36,10 +36,16 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.sprin
     <property name="username" value="${mail.smtp.username}"/>
     <property name="password" value="${mail.smtp.password}"/>
     <property name="defaultEncoding" value="${mail.smtp.defaultEncoding}"/>
+    <property name="port" value="${mail.smtp.port}"/>
     <property name="javaMailProperties">
         <props>
             <prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
             <prop key="mail.smtp.timeout">${mail.smtp.timeout}</prop>
+            <prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
+            <prop key="mail.smtp.starttls.required">${mail.smtp.starttls.required}</prop>
+            <prop key="mail.smtp.socketFactory.port">${mail.smtp.socketFactory.port}</prop>
+            <prop key="mail.smtp.socketFactory.class">${mail.smtp.socketFactory.class}</prop>
+            <prop key="mail.smtp.socketFactory.fallback">${mail.smtp.socketFactory.fallback}</prop>
         </props>
     </property>
 </bean>

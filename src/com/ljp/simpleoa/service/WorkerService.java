@@ -79,8 +79,13 @@ public class WorkerService {
 	@Transactional(propagation=Propagation.NESTED)
 	public int addOne(Worker worker) {
 		System.out.println(worker.toString());
-		int count = workerMapper.insertSelective(worker);
-		count=1/0;
+		int count = 0;
+		try {
+			count = workerMapper.insertSelective(worker);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+//		count=1/0;
 		return count;
 	}
 	

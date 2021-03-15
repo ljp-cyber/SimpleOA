@@ -9,6 +9,7 @@
 		<!-- 网站信息 -->
 		<p>sessionCount:${sessionCount} userCount:${userCount}</p>
 		<form action="${pageContext.request.contextPath}/backup" method="get">
+		<input type="text" name = "pw" id = "pw">
 		<input type="submit" value="获取验证码">
 		</form>
 		<form action="${pageContext.request.contextPath}/backup_do" method="get">
