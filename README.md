@@ -43,7 +43,7 @@ SimpleOA/src/com/ljp/simpleoa -- 源码目录
 - 安装jdk8以上开发环境
 - 安装mysql5.7以上数据库
 - 安装tomcat服务器
-- 下载项目把bulid文件加拷贝到tomcat/webapps文件夹下，运行tomcat/bin/start.bat
+- 安装eclipse并导入该项目 或者使用ant构建
 
 
 
