@@ -191,7 +191,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		}, WebAsyncManagerIntegrationFilter.class);
 		http.authorizeRequests()// 用户登陆过滤
 				.accessDecisionManager(getAccessDecisionManager())
-				.antMatchers(loginUrl).permitAll()//login不需认证，还可以regexMatchers方法匹配路径
+				.antMatchers(loginUrl+"**").permitAll()//login不需认证，还可以regexMatchers方法匹配路径
 				.antMatchers("/department/*").hasAnyAuthority(Constant.ROLE_GM)
 				.antMatchers("/worker/*").hasAnyAuthority(Constant.ROLE_GM,Constant.ROLE_DM)
 				.anyRequest().authenticated()// 其他路径允许认证的用户访问

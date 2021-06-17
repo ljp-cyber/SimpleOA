@@ -1,5 +1,6 @@
 package com.ljp.simpleoa.config;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
 /**
@@ -67,6 +68,7 @@ import org.springframework.security.web.context.AbstractSecurityWebApplicationIn
  * @author LiJunPeng
  *
  */
+@Configuration
 public class SecurityWebInitializer extends AbstractSecurityWebApplicationInitializer{
 	public SecurityWebInitializer() {
 		System.out.println("SecurityWebInitializer.constructor()");

@@ -12,6 +12,31 @@ import com.ljp.simpleoa.Constant;
 
 public class Worker implements Serializable,UserDetails{
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((workerId == null) ? 0 : workerId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Worker other = (Worker) obj;
+		if (workerId == null) {
+			if (other.workerId != null)
+				return false;
+		} else if (!workerId.equals(other.workerId))
+			return false;
+		return true;
+	}
+
 	private static final long serialVersionUID = -5305510795889968181L;
 
 	private Integer workerId;

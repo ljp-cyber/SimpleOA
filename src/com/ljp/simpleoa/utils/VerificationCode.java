@@ -1,13 +1,18 @@
 package com.ljp.simpleoa.utils;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * 验证码生产工具
+ * @author LiJunPeng
+ *
+ */
+//TODO 设计得有点混乱，应该把创建工具和VerificationCode拆分
 public class VerificationCode {
 	
 	private static AtomicLong increment = new AtomicLong(0);
@@ -41,6 +46,8 @@ public class VerificationCode {
 	public void setExpires(Date expires) {
 		this.expires = expires;
 	}
+	
+	
 	public boolean isExpires() {
 		System.out.println(expires);
 		System.out.println(new Date(System.currentTimeMillis()));
@@ -49,6 +56,7 @@ public class VerificationCode {
 		return b;
 	}
 	public static VerificationCode creat(int bits,int validitySecond) {
+		//不让map太大
 		if(map.size()>1000) {
 			Iterator<Long> iterator = map.keySet().iterator();
 			while(iterator.hasNext()) {
