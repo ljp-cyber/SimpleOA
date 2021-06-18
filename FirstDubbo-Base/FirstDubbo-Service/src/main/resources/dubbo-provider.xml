@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 接入dubbo的应用程序名称 -->
+	<dubbo:application name="demo-provider" />
+
+	<!-- 注册仓库地址：zookeeper组件，192.168.61.128:2181 -->
+	<dubbo:registry address="zookeeper://127.0.0.1:2181" />
+	<dubbo:config-center address="zookeeper://127.0.0.1:2181"></dubbo:config-center>
+	<dubbo:metadata-report address="zookeeper://127.0.0.1:2181"></dubbo:metadata-report>
+
+	<!-- 用dubbo协议在20880端口暴露服务 -->
+	<dubbo:protocol name="dubbo" port="20883" />
+
+
+	<!-- 引用的服务，那个interface一定是一个被引入到DUBBO仓库的接口定义 -->
+    <dubbo:reference id="departmentMapper" interface="com.ljp.mapper.DepartmentMapper" timeout="10000"/>
+    <dubbo:reference id="workerMapper" interface="com.ljp.mapper.WorkerMapper" timeout="10000"/>
+    <dubbo:reference id="receiptsMapper" interface="com.ljp.mapper.ReceiptsMapper" timeout="10000"/>
+    <dubbo:reference id="receiptsDetailsMapper" interface="com.ljp.mapper.ReceiptsDetailsMapper" timeout="10000"/>
+    <dubbo:reference id="receiptsRecordMapper" interface="com.ljp.mapper.ReceiptsRecordMapper" timeout="10000"/>
+
+	<context:component-scan base-package="com.ljp.service"></context:component-scan>
+
+	<!-- 声明需要暴露的服务接口 -->
+	<dubbo:service interface="com.ljp.serviceinterface.DepartmentServiceFace" ref="departmentService"  timeout="10000"/>
+	<dubbo:service interface="com.ljp.serviceinterface.WorkerServiceFace" ref="workerService" timeout="10000"/>
+	<dubbo:service interface="com.ljp.serviceinterface.LoginServiceFace" ref="loginService" timeout="10000"/>
+	<dubbo:service interface="com.ljp.serviceinterface.ReceiptsServiceFace" ref="receiptsService" timeout="10000"/>
+</beans>

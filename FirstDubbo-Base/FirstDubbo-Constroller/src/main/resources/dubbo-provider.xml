@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 接入dubbo的应用程序名称 -->
+	<dubbo:application name="demo-provider" />
+
+	<!-- 注册仓库地址：zookeeper组件，192.168.61.128:2181 -->
+	<dubbo:registry address="zookeeper://127.0.0.1:2181" />
+
+	<!-- 用dubbo协议在20880端口暴露服务 -->
+	<!-- <dubbo:protocol name="dubbo" port="20880" /> -->
+
+
+	<!-- 引用的服务，那个interface一定是一个被引入到DUBBO仓库的接口定义 -->
+    <dubbo:reference id="departmentService" interface="com.ljp.serviceinterface.DepartmentServiceFace"/>
+    <dubbo:reference id="loginService" interface="com.ljp.serviceinterface.LoginServiceFace"/>
+    <dubbo:reference id="receiptsService" interface="com.ljp.serviceinterface.ReceiptsServiceFace"/>
+    <dubbo:reference id="workerService" interface="com.ljp.serviceinterface.WorkerServiceFace"/>
+    
+
+</beans>

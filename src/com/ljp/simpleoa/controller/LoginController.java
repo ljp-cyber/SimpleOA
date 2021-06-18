@@ -1,25 +1,17 @@
 package com.ljp.simpleoa.controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.Random;
-import java.util.Timer;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -133,8 +125,8 @@ public class LoginController {
 			System.out.println("session¸öÊý"+allSessions.size());
 			for (int j = 0; j < allSessions.size(); j++) {
 				SessionInformation sessionInformation=allSessions.get(j);
-				System.out.println("sessionRegistry£º"+sessionInformation.getSessionId());
-				System.out.println("sessionRegistry£º"+df.format(sessionInformation.getLastRequest()));
+				System.out.println("sessionRegistry ID:"+sessionInformation.getSessionId());
+				System.out.println("sessionRegistry getLastRequest:"+df.format(sessionInformation.getLastRequest()));
 			}
 			sessionCount+=allSessions.size();
 		}

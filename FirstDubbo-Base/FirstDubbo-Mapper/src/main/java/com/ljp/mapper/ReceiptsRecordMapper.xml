@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljp.mapper.ReceiptsRecordMapper">
+  <resultMap id="BaseResultMap" type="com.ljp.bean.ReceiptsRecord">
+    <id column="receipts_record_id" jdbcType="INTEGER" property="receiptsRecordId" />
+    <result column="receipts_id" jdbcType="INTEGER" property="receiptsId" />
+    <result column="deal_id" jdbcType="INTEGER" property="dealId" />
+    <result column="deal_time" jdbcType="TIMESTAMP" property="dealTime" />
+    <result column="deal_type" jdbcType="VARCHAR" property="dealType" />
+    <result column="deal_result" jdbcType="VARCHAR" property="dealResult" />
+    <result column="represention" jdbcType="VARCHAR" property="represention" />
+    <result column="worker_name" jdbcType="VARCHAR" property="dealer.workerName" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    receipts_record_id, receipts_id, deal_id, deal_time, deal_type, deal_result, 
+    represention
+  </sql>
+  <select id="selectByExample" parameterType="com.ljp.bean.ReceiptsRecordExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from receipts_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExampleAndLeftJoinWorker" parameterType="com.ljp.bean.ReceiptsRecordExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,worker.worker_name
+    from receipts_record left join worker
+    on (deal_id=worker_id)
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from receipts_record
+    where receipts_record_id = #{receiptsRecordId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from receipts_record
+    where receipts_record_id = #{receiptsRecordId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ljp.bean.ReceiptsRecordExample">
+    delete from receipts_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ljp.bean.ReceiptsRecord">
+    insert into receipts_record (receipts_record_id, receipts_id, deal_id, 
+      deal_time, deal_type, deal_result, 
+      represention)
+    values (#{receiptsRecordId,jdbcType=INTEGER}, #{receiptsId,jdbcType=INTEGER}, #{dealId,jdbcType=INTEGER}, 
+      #{dealTime,jdbcType=TIMESTAMP}, #{dealType,jdbcType=VARCHAR}, #{dealResult,jdbcType=VARCHAR}, 
+      #{represention,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ljp.bean.ReceiptsRecord">
+    insert into receipts_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="receiptsRecordId != null">
+        receipts_record_id,
+      </if>
+      <if test="receiptsId != null">
+        receipts_id,
+      </if>
+      <if test="dealId != null">
+        deal_id,
+      </if>
+      <if test="dealTime != null">
+        deal_time,
+      </if>
+      <if test="dealType != null">
+        deal_type,
+      </if>
+      <if test="dealResult != null">
+        deal_result,
+      </if>
+      <if test="represention != null">
+        represention,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="receiptsRecordId != null">
+        #{receiptsRecordId,jdbcType=INTEGER},
+      </if>
+      <if test="receiptsId != null">
+        #{receiptsId,jdbcType=INTEGER},
+      </if>
+      <if test="dealId != null">
+        #{dealId,jdbcType=INTEGER},
+      </if>
+      <if test="dealTime != null">
+        #{dealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dealType != null">
+        #{dealType,jdbcType=VARCHAR},
+      </if>
+      <if test="dealResult != null">
+        #{dealResult,jdbcType=VARCHAR},
+      </if>
+      <if test="represention != null">
+        #{represention,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ljp.bean.ReceiptsRecordExample" resultType="java.lang.Long">
+    select count(*) from receipts_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update receipts_record
+    <set>
+      <if test="record.receiptsRecordId != null">
+        receipts_record_id = #{record.receiptsRecordId,jdbcType=INTEGER},
+      </if>
+      <if test="record.receiptsId != null">
+        receipts_id = #{record.receiptsId,jdbcType=INTEGER},
+      </if>
+      <if test="record.dealId != null">
+        deal_id = #{record.dealId,jdbcType=INTEGER},
+      </if>
+      <if test="record.dealTime != null">
+        deal_time = #{record.dealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dealType != null">
+        deal_type = #{record.dealType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dealResult != null">
+        deal_result = #{record.dealResult,jdbcType=VARCHAR},
+      </if>
+      <if test="record.represention != null">
+        represention = #{record.represention,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update receipts_record
+    set receipts_record_id = #{record.receiptsRecordId,jdbcType=INTEGER},
+      receipts_id = #{record.receiptsId,jdbcType=INTEGER},
+      deal_id = #{record.dealId,jdbcType=INTEGER},
+      deal_time = #{record.dealTime,jdbcType=TIMESTAMP},
+      deal_type = #{record.dealType,jdbcType=VARCHAR},
+      deal_result = #{record.dealResult,jdbcType=VARCHAR},
+      represention = #{record.represention,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ljp.bean.ReceiptsRecord">
+    update receipts_record
+    <set>
+      <if test="receiptsId != null">
+        receipts_id = #{receiptsId,jdbcType=INTEGER},
+      </if>
+      <if test="dealId != null">
+        deal_id = #{dealId,jdbcType=INTEGER},
+      </if>
+      <if test="dealTime != null">
+        deal_time = #{dealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dealType != null">
+        deal_type = #{dealType,jdbcType=VARCHAR},
+      </if>
+      <if test="dealResult != null">
+        deal_result = #{dealResult,jdbcType=VARCHAR},
+      </if>
+      <if test="represention != null">
+        represention = #{represention,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where receipts_record_id = #{receiptsRecordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ljp.bean.ReceiptsRecord">
+    update receipts_record
+    set receipts_id = #{receiptsId,jdbcType=INTEGER},
+      deal_id = #{dealId,jdbcType=INTEGER},
+      deal_time = #{dealTime,jdbcType=TIMESTAMP},
+      deal_type = #{dealType,jdbcType=VARCHAR},
+      deal_result = #{dealResult,jdbcType=VARCHAR},
+      represention = #{represention,jdbcType=VARCHAR}
+    where receipts_record_id = #{receiptsRecordId,jdbcType=INTEGER}
+  </update>
+</mapper>
