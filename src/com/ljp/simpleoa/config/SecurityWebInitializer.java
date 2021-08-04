@@ -61,7 +61,7 @@ import org.springframework.security.web.context.AbstractSecurityWebApplicationIn
  * 		与AccessDeniedException两个异常。AuthenticationException指的是未登录状态下访问受保护资源，
  * 		AccessDeniedException指的是登陆了但是由于权限不足（比如普通用户访问管理员界面）。 
  * 14、FilterSecurityInterceptor
- * 		 这个filter用于授权验证。FilterSecurityInterceptor的工作流程引用一下，可以理解如下：
+ * 		 这个filter用于授权验证。FilterSecurityInterceptor的工作流程：
  * 		FilterSecurityInterceptor从SecurityContextHolder中获取Authentication对象，
  * 		然后比对用户拥有的权限和资源所需的权限。前者可以通过Authentication对象直接获得，
  * 		而后者则需要引入我们之前一直未提到过的两个类：SecurityMetadataSource，AccessDecisionManager。

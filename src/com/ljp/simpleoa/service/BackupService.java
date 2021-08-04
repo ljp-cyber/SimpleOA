@@ -3,6 +3,7 @@ package com.ljp.simpleoa.service;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
@@ -28,7 +29,11 @@ public class BackupService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

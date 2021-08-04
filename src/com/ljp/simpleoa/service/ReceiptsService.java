@@ -41,14 +41,15 @@ public class ReceiptsService extends ReceiptsDaoService {
 
 	}
 
+	@Autowired
 	private ReceiptsRuleService receiptsRuleService;
 
 	@Autowired
 	public ReceiptsService(WorkerService workerService, ReceiptsMapper receiptsMapper,
 			ReceiptsDetailsMapper receiptsDetailsMapper, ReceiptsRecordMapper receiptsRecordMapper) {
 		super(workerService, receiptsMapper, receiptsDetailsMapper, receiptsRecordMapper);
-		if(workerService!=null)
-		this.receiptsRuleService = new ReceiptsRuleService(workerService);
+//		if(workerService!=null)
+//		this.receiptsRuleService = new ReceiptsRuleService(workerService);
 	}
 
 	/**

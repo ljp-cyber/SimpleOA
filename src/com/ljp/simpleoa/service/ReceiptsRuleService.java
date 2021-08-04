@@ -2,6 +2,9 @@ package com.ljp.simpleoa.service;
 
 import java.util.LinkedHashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ljp.simpleoa.Constant;
 import com.ljp.simpleoa.model.Receipts;
 import com.ljp.simpleoa.model.Worker;
@@ -13,6 +16,7 @@ import com.ljp.simpleoa.process.ProcessBuilder;
 import com.ljp.simpleoa.process.Step;
 import com.ljp.simpleoa.process.StepUtils;
 
+@Component
 public class ReceiptsRuleService {
 
 	/**
@@ -97,6 +101,7 @@ public class ReceiptsRuleService {
 
 	}
 
+	@Autowired
 	private WorkerService workerService;
 	private Process process;
 
@@ -112,7 +117,7 @@ public class ReceiptsRuleService {
 	/**
 	 * 初始化流程处理
 	 */
-	public void init() {
+	private void init() {
 		ProcessBuilder pb=new ProcessBuilder();
 		MeDealerStrategy creatDealerStrategy = new MeDealerStrategy();
 		DepartmentDealerStrategy departmentDealerStrategy = new DepartmentDealerStrategy();

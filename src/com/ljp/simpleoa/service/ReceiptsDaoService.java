@@ -33,6 +33,12 @@ public class ReceiptsDaoService {
 		this.receiptsRecordMapper = receiptsRecordMapper;
 	}
 	
+	/**
+	 * 删除报销单要同时删除报销单详情，开启事务
+	 * 可以用sql语句优化
+	 * @param receiptsIds
+	 * @return
+	 */
 	@Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED, readOnly = false)
 	public boolean removeReceipts(String receiptsIds) {
 		String[] strings = receiptsIds.split(",");
@@ -220,6 +226,7 @@ public class ReceiptsDaoService {
 		return count;
 	}
 
+	@Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED, readOnly = false)
 	public boolean updateReceiptsDetailsByReceiptsId(Integer receiptsId, List<ReceiptsDetails> newItems) {
 		List<ReceiptsDetails> oldItems = queryReceiptsDetailsByReceiptsId(receiptsId);
 		System.out.println("*****oldItems******" + oldItems);
